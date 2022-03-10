@@ -1,4 +1,4 @@
-import { RssFeed, School, Event, WorkOutline, HelpOutline, Chat, Video, PlayCircleFilledOutlined, Group, Bookmark } from "@material-ui/icons"
+import { RssFeed, School, Event, WorkOutline, HelpOutline, Chat, PlayCircleFilledOutlined, Group, Bookmark } from "@material-ui/icons"
 import "./sidebar.css"
 
 export default function sidebar() {
@@ -16,7 +16,7 @@ export default function sidebar() {
           </li>
           <li className="sidebarListItem">
             <PlayCircleFilledOutlined className="sidebarIcon"/>
-            <span className="sidebarListItemText"> videos</span>
+            <span className="sidebarListItemText"> Videos</span>
           </li>
           <li className="sidebarListItem">
             <Group className="sidebarIcon"/>
