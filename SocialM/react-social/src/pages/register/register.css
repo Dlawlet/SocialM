@@ -25,7 +25,6 @@
     font-size: 50px;
     color: rgb(46, 121, 206);
     margin-bottom: 10px;
-
 }
 
 .registerDesc{
@@ -33,10 +32,10 @@
 }
 
 .registerBox{
-    height: 400px;
+    height: 600px;
     padding: 20px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -69,7 +68,6 @@
 .registerForgot{
     text-align: center;
     color: rgb(84, 84, 177);
-
 }
 
 .registerRegisterButton{

@@ -1,26 +1,80 @@
-import "./register.css"
+import axios from "axios";
+import { useRef } from "react";
+import "./register.css";
+import { useNavigate } from "react-router";
 
 export default function Register() {
-    return(
-        <div className="register">
-            <div className="registerWrapper">
-                <div className="registerleft">
-                    <h3 className="registerLogo"> LawletSocial</h3>
-                    <span className="registerDesc">
-                        Connect with friends and World around you on LawletSocial.
-                    </span>
-                </div>
-                <div className="registerRight">
-                    <div className="registerBox">
-                        <input placeholder="Username" className="registerInput" />
-                        <input placeholder="Email" className="registerInput" />
-                        <input placeholder="password" className="registerInput" />
-                        <input placeholder="password Again" className="registerInput" />
-                        <button className="registerButton"> Sign Up </button>
-                        <button className="registerRegisterButton">Log into Account</button>
-                    </div>    
-                </div>
-            </div>
+  const username = useRef();
+  const email = useRef();
+  const password = useRef();
+  const passwordAgain = useRef();
+  const history = useNavigate();
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    if (passwordAgain.current.value !== password.current.value) {
+      passwordAgain.current.setCustomValidity("Passwords don't match!");
+    } else {
+      const user = {
+        username: username.current.value,
+        email: email.current.value,
+        password: password.current.value,
+      };
+      try {
+        await axios.post("/auth/register", user);
+        history.push("/login");
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  return (
+    <div className="login">
+      <div className="loginWrapper">
+        <div className="loginLeft">
+          <h3 className="loginLogo">Lawletsocial</h3>
+          <span className="loginDesc">
+            Connect with friends and the world around you on Lawletsocial.
+          </span>
         </div>
-    )
+        <div className="loginRight">
+          <form className="loginBox" onSubmit={handleClick}>
+            <input
+              placeholder="Username"
+              required
+              ref={username}
+              className="loginInput"
+            />
+            <input
+              placeholder="Email"
+              required
+              ref={email}
+              className="loginInput"
+              type="email"
+            />
+            <input
+              placeholder="Password"
+              required
+              ref={password}
+              className="loginInput"
+              type="password"
+              minLength="6"
+            />
+            <input
+              placeholder="Password Again"
+              required
+              ref={passwordAgain}
+              className="loginInput"
+              type="password"
+            />
+            <button className="loginButton" type="submit">
+              Sign Up
+            </button>
+            <button className="loginRegisterButton">Log into Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }
