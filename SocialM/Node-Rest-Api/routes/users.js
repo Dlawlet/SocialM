@@ -1,9 +1,9 @@
-const User = require("../models/User")
+const User = require("../models/User");
 const router = require("express").Router();
-const bcrypt = require ("bcrypt");
+const bcrypt = require("bcrypt");
 
 //update user
-router.put("/:id", async(req,res)=>{
+router.put("/:id", async(req, res)=>{
     if(req.body.userId === req.params.id || req.body.isAdmin){
         if (req.body.password){
             try{
@@ -15,36 +15,39 @@ router.put("/:id", async(req,res)=>{
         }
         try{
             const user = await User.findByIdAndUpdate(req.params.id, {$set: req.body,});
-            res.status(200).json("password have been updated")
-        }catch(err){
+            res.status(200).json("Account have been updated")
+        } catch( err ){
             return res.status(500).json(err)
         }
-    }else{
-        return res.status(403).json("you can update only your acoount!")
-    };
-})
+    } else{
+        return res.status(403).json("you can update only your acoount!");
+    }
+});
 
 //delete user 
-router.delete("/:id", async(req,res)=>{
-    if(req.body.userId === req.params.id || req.body.isAdmin){
+router.delete("/:id", async(req, res) => { 
+    if(req.body.userId === req.params.id || req.body.isAdmin) {
         try{
-            const user = await User.findByIdAndDelete(req.params.id);
-            res.status(200).json("account  have been deleted")
-        }catch(err){
+            await User.findByIdAndDelete(req.params.id);
+            res.status(200).json("account  have been deleted");
+        }catch( err ){
             return res.status(500).json(err)
         }
-    }else{
-        return res.status(403).json("you can delete only your acoount!")
-    };
-})
+    } else{
+        return res.status(403).json("you can delete only your acoount!");
+    }
+});
 
 //get user
-router.get("/:id", async(req,res)=> {
+router.get("/", async(req,res)=> {
+    const userId = req.query.userId;
+    const username = req.query.username;
     try {
-        const user = await User.findById(req.params.id);
-        const {password,updateAt, ...other} = user._doc; //this is in purpose to return everything (other) except psword and updateAt
-        res.status(200).json(other);
-    }
+        const user = userId
+      ? await User.findById(userId)
+      : await User.findOne({ username: username });
+    const { password, updatedAt, ...other } = user._doc;
+    res.status(200).json(other);}
     catch(err){
         res.status(500).json(err);
     }
@@ -75,20 +78,20 @@ router.get("/friends/:userId", async (req, res) => {
 router.put("/:id/follow", async (req,res)=>{
     if (req.body.userId !== req.params.id){
         try{
-            const user = await User.findById(req.params.id)
+            const user = await User.findById(req.params.id);
             const currentUser = await User.findById(req.body.userId);
             if (!user.followers.includes(req.body.userId)){
-                await user.updateOne({ $push: {followers: req.body.userId}});
+                await user.updateOne({ $push: { followers: req.body.userId}});
                 await currentUser.updateOne({ $push: {followings: req.params.id}});
-                res.status(200).json("user has been follow")
+                res.status(200).json("user has been follow");
             }else {
                 res.status(403).json("You are already a follower");
             }
         }catch(err){
-            res.status(500).json(err)
+            res.status(500).json(err);
         }
     }else{
-        res.status(403).json("you can't follow your self")
+        res.status(403).json("you can't follow your self");
     }
 
 });
@@ -102,18 +105,18 @@ router.put("/:id/unfollow", async (req,res)=>{
             if (user.followers.includes(req.body.userId)){
                 await user.updateOne({ $pull: {followers: req.body.userId}});
                 await currentUser.updateOne({ $pull: {followings: req.params.id}});
-                res.status(200).json("user has been unfollow")
+                res.status(200).json("user has been unfollow");
             }else {
                 res.status(403).json("You are'nt  already a follower");
             }
         }catch(err){
-            res.status(500).json(err)
+            res.status(500).json(err);
         }
     }else{
-        res.status(403).json("you can't unfollow yourself")
+        res.status(403).json("you can't unfollow yourself");
     }
 
 });
 
 
-module.exports = router
+module.exports = router;

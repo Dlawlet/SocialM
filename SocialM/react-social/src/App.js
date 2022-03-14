@@ -8,13 +8,12 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useControlled } from "@material-ui/core";
 import { AuthContext } from "./context/AuthContext";
-
+import { useContext } from "react";
 
 function App() {
 
-  const {user} = useControlled(AuthContext)
+  const { user } = useContext(AuthContext);
   return (
     <Router>
       <Routes>
